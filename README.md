@@ -11,7 +11,7 @@
 
 ## 在线体验
 
-<https://wu-shengnan-2025.github.io/juanjuanyang-sudoku/>
+<https://shiyuan170146-bit.github.io/juanjuanyang-sudoku/>
 
 纯前端，打开即玩，不用登录。手机和桌面都有对应版式。
 
