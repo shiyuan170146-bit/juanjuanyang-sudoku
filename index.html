@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<!-- G3-struct -->
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="public, max-age=300, must-revalidate">
+
+<title>卷卷羊 · 数独学园 —— 会教你的数独</title>
+<meta name="description" content="卷卷羊·数独学园——会教你的数独。卡住不慌：提示会把卡点存进卡点本，之后回到原局面自己重推。每日挑战打卡、技巧解锁、拼图收集。">
+<meta property="og:title" content="卷卷羊 · 数独学园">
+<meta property="og:description" content="卷卷羊·数独学园——会教你的数独。卡住不慌：提示会把卡点存进卡点本，之后回到原局面自己重推。每日挑战打卡、技巧解锁、拼图收集。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://juanjuanyang-sudoku.app.workbuddy.host/share-cover.png?sharecode=OUQT4PXSUZ">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="900">
+<meta property="og:image:type" content="image/png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="卷卷羊 · 数独学园">
+<meta name="twitter:description" content="卷卷羊·数独学园——会教你的数独。卡住不慌：提示会把卡点存进卡点本，之后回到原局面自己重推。每日挑战打卡、技巧解锁、拼图收集。">
+<meta name="twitter:image" content="https://juanjuanyang-sudoku.app.workbuddy.host/share-cover.png?sharecode=OUQT4PXSUZ">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PHJlY3Qgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJyByeD0nNycgZmlsbD0nIzdGQTA1QicvPjxnIGZpbGw9JyNGRkZERjQnPjxyZWN0IHg9JzUuNScgeT0nNS41JyB3aWR0aD0nNi41JyBoZWlnaHQ9JzYuNScgcng9JzEuNicvPjxyZWN0IHg9JzIwJyB5PSc1LjUnIHdpZHRoPSc2LjUnIGhlaWdodD0nNi41JyByeD0nMS42Jy8+PHJlY3QgeD0nMTIuNzUnIHk9JzEyLjc1JyB3aWR0aD0nNi41JyBoZWlnaHQ9JzYuNScgcng9JzEuNicvPjxyZWN0IHg9JzUuNScgeT0nMjAnIHdpZHRoPSc2LjUnIGhlaWdodD0nNi41JyByeD0nMS42Jy8+PHJlY3QgeD0nMjAnIHk9JzIwJyB3aWR0aD0nNi41JyBoZWlnaHQ9JzYuNScgcng9JzEuNicvPjwvZz48L3N2Zz4=">
+<link rel="apple-touch-icon" href="share-cover.png">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<!-- 手绘旅行背景（纯装饰，固定层不参与布局）：太阳 / 云 / 远山 / 草甸 / 小花 -->
+<div class="scene" aria-hidden="true">
+  <i class="sc-sun"></i>
+  <i class="sc-cl c1"></i><i class="sc-cl c2"></i><i class="sc-cl c3"></i>
+  <i class="sc-hl h1"></i><i class="sc-hl h2"></i>
+  <i class="sc-grass"></i>
+  <i class="sc-sheep"></i>
+  <i class="sc-fl f1"></i><i class="sc-fl f2"></i><i class="sc-fl f3"></i>
+</div>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <span class="bt"><span class="bt-yy">卷卷羊<svg class="bt-horns" viewBox="0 0 40 14" aria-hidden="true"><path d="M6 12 C3 7 5 2.5 10 2.5 C13.5 2.5 15 5.5 13 8 C11.5 9.8 9 9.4 8.4 7.6"/><path d="M34 12 C37 7 35 2.5 30 2.5 C26.5 2.5 25 5.5 27 8 C28.5 9.8 31 9.4 31.6 7.6"/></svg></span><svg class="bt-hoof" viewBox="0 0 22 20" aria-hidden="true"><path d="M6.6 3.2 C9.4 3.2 10.8 6.2 10.2 10.4 C9.9 12.9 8.5 14.2 6.6 14 C4.4 13.8 3.1 11.3 3.5 8 C3.9 5 4.9 3.2 6.6 3.2 Z"/><path d="M15.4 3.2 C12.6 3.2 11.2 6.2 11.8 10.4 C12.1 12.9 13.5 14.2 15.4 14 C17.6 13.8 18.9 11.3 18.5 8 C18.1 5 17.1 3.2 15.4 3.2 Z"/></svg><span>数独学园</span></span>
+    </div>
+    <span class="spacer"></span>
+    <div class="tiers" id="tiers"></div>
+    <!-- 每日挑战入口：原先是一整张常驻卡片（占约 44px 纵高、做题时纯属占地方），
+         2026-10-29 收成顶栏一枚小按钮 —— 今日未打卡显示暖黄小点，已完成整枚转暖黄。
+         点开是「每日挑战」面板：今日题目 + 打卡图 + 开始挑战。 -->
+    <button class="dbtn" id="dailyBtn" type="button" title="每日挑战：每天一道全网同题，打卡连成图">
+      <svg class="db-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10 H20 M8.5 3.2 V7 M15.5 3.2 V7 M8.5 13.5 H10 M14 13.5 H15.5 M8.5 16.5 H10 M14 16.5 H15.5"/></svg>
+      <span class="db-t" id="dailyBtnTxt">每日挑战</span>
+      <i class="db-dot" id="dailyBtnDot" hidden aria-hidden="true"></i>
+    </button>
+    <div class="navmenu">
+      <input class="navchk" type="checkbox" id="navChk" aria-label="更多入口">
+      <label class="navtoggle" for="navChk" title="更多入口" aria-label="更多入口"></label>
+      <label class="navscrim" for="navChk" aria-hidden="true"></label>
+      <div class="navmenu-body">
+  <nav class="nav">
+        <button class="navbtn" id="navPuzzle" title="完成任务收集拼图碎片"><span class="ni"><svg class="npz" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 5.5 H9 Q8.5 3 11 3 Q13.5 3 13 5.5 H15.5 Q17 5.5 17 7 V9.5 Q19.5 9 19.5 11.5 Q19.5 14 17 13.5 V16 Q17 17.5 15.5 17.5 H7 Q5.5 17.5 5.5 16 V13.5 Q3 14 3 11.5 Q3 9 5.5 9.5 V7 Q5.5 5.5 6.5 5.5 Z"/></svg></span><span class="nbl">拼图</span><i class="nbadge" id="pzBadge" hidden></i></button>
+        <button class="navbtn" id="navSkills" title="L1–L8 技巧图鉴"><span class="ni"><svg class="nsp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 L14 9.7 L21 12 L14 14.3 L12 21 L10 14.3 L3 12 L10 9.7 Z"/></svg></span><span class="nbl">技巧</span></button>
+        <button class="navbtn" id="navTutorial" title="新手教程：每一招配一个真实局面，手把手走一遍"><span class="ni"><svg class="ntu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5 H9 Q10.5 5.5 10.5 7 V17 Q10.5 18.5 9 18.5 H4.5 Q3 18.5 3 17 V7 Q3 5.5 4.5 5.5 Z M13.5 5.5 H18 Q19.5 5.5 19.5 7 V17 Q19.5 18.5 18 18.5 H13.5 Q12 18.5 12 17 V7 Q12 5.5 13.5 5.5 Z"/></svg></span><span class="nbl">教程</span></button>
+        <button class="navbtn" id="navStats" title="能力画像：通关统计与技巧分布"><span class="ni"><svg class="nch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20 H20 M7.5 20 V13 M12 20 V7.5 M16.5 20 V11"/></svg></span><span class="nbl">画像</span></button>
+        <button class="navbtn" id="navAbout" title="玩法说明与工程验证"><span class="ni"><svg class="nin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11.2 V16.2 M12 7.7 V8.5"/></svg></span><span class="nbl">关于</span></button>
+        <button class="navbtn hot" id="navCards" title="复盘我卡住过的局面">
+          <span class="ni"><svg class="nnt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 H16.5 Q18.5 4 18.5 6 V18 Q18.5 20 16.5 20 H7 Q5 20 5 18 V6 Q5 4 7 4 Z M8 4 V20 M11.5 8.5 H15 M11.5 12 H15 M11.5 15.5 H15"/></svg></span><span class="nbl">卡点本</span>
+          <i class="nbadge" id="navCardBadge" hidden>0</i>
+        </button>
+        <button class="navbtn" id="navRecords" title="我做过哪些题：完成 / 进行中 / 放弃都在这里"><span class="ni"><svg class="nrc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4 H17 Q19 4 19 6 V18 Q19 20 17 20 H7 Q5 20 5 18 V6 Q5 4 7 4 Z M7.5 8 H14 M7.5 12 H16 M7.5 16 H12"/></svg></span><span class="nbl">已做</span><i class="nbadge" id="recBadge" hidden>0</i></button>
+      </nav>
+      <button class="chip avatar" id="acctBtn" title="账号中心：进度按账号分开保存"><span class="av" id="acctAv">游</span><span class="txt" id="acctChipName">微信用户</span></button>
+      <span class="bver" id="bver" title="构建版本"></span><button class="icon-btn" id="themeBtn" title="切换深色 / 浅色"><svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 14.2 Q17.5 15.3 15.3 15 Q11.3 14.5 10 10.8 Q8.9 7.6 11.2 4.8 Q6.6 5.5 5.3 9.8 Q4 14.3 7.4 17.4 Q11 20.5 15.2 19.1 Q18.3 18 19.5 14.2 Z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 3.4 V5.3 M12 18.7 V20.6 M3.4 12 H5.3 M18.7 12 H20.6 M6.1 6.1 L7.4 7.4 M16.6 16.6 L17.9 17.9 M17.9 6.1 L16.6 7.4 M7.4 16.6 L6.1 17.9"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 视图 · 做题（主界面，只放解题所需） ==================== -->
+  <main class="view" id="view-play">
+    <!-- 左侧栏：宽屏（PC 横屏）排在棋盘左边，窄屏自动回到棋盘上方（CSS 控制） -->
+    <div class="sidecol" id="sideCol">
+    <!-- 每日挑战：按日期定题，完成点亮连续打卡 -->
+                                                            <div class="newbie" id="newbie" hidden>
+      <span class="nb-ic"><svg class="nbstar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 L14 9.7 L21 12 L14 14.3 L12 21 L10 14.3 L3 12 L10 9.7 Z"/></svg></span>
+      <span class="nb-tx">第一次玩？从 <b>「入门」</b>开始最稳 —— 卡住就点键盘上的 <b>提示</b>。</span>
+      <button class="lnk" id="newbieX">知道了</button>
+    </div>
+    <!-- 每日挑战卡已收进顶栏的 #dailyBtn（2026-10-29）：常驻卡片在做题时纯占纵高，
+         内容全部搬进「每日挑战」面板（#dailyOv），省下的高度直接给了棋盘。 -->
+    <div class="tail">
+      卡住了就点键盘上的 <b>提示</b> —— 它会把这步<b>存进卡点本</b>，之后可以回到当时那个局面自己重推。
+      <a id="lnkAbout">玩法说明 →</a>
+    </div>
+
+    <!-- J-B3 / K-1：桌面三栏左栏下部的空绿，用来放「卡点本摘要」——和「会教你的数独」定位最搭的那张卡。
+         常驻显示（空卡点也显示引导语），<1120px 由 CSS 的 display:none 彻底不占位。 -->
+    <div class="leftnote" id="leftNote">
+      <div class="ln-hd"><b>卡点本</b><span id="leftNoteTag">还没有</span></div>
+      <div class="ln-body" id="leftNoteBody"></div>
+      <button class="btn sm ln-btn" id="leftNoteBtn" type="button">打开卡点本</button>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    </div>
+
+    <div class="boardwrap">
+      <div class="status">
+        <span class="st st-err" id="stErrWrap">错误 <i class="st-x" aria-hidden="true"></i><b id="stErr">0</b></span>
+        <!-- 草稿盘状态胶囊（2026-10-29）：草稿态顶替「错误」位，点一下退出草稿。
+             放这里而不是新起一条横幅，是因为它零纵高代价 —— 手机档棋盘每多占 1px，
+             fitScale 就得整体降一档。 -->
+        <button class="st st-draft" id="stDraft" type="button" hidden
+                title="草稿推演中：原盘面一格没动。点这里退出草稿">
+          <i class="df-ic" aria-hidden="true"></i>
+          <span class="df-t">草稿 · <b id="dfSteps">0</b> 步</span>
+          <i class="df-x" aria-hidden="true"></i>
+        </button>
+        <span class="right">
+          <button class="clock" id="clockBtn" type="button" title="点击暂停 / 继续（也可按空格）">
+            <b id="stTime">00:00</b>
+          </button>
+          <details class="more">
+            <summary title="棋局设置" aria-label="棋局设置"></summary>
+            <div class="more-body">
+              <p class="more-t">棋局设置</p>
+              <div class="more-row">
+                <span class="st">提示 <b id="stHint">0</b></span>
+                <span class="st">本题 L<b id="stGrade">1</b></span>
+                <span class="st tip" id="btnTip" title="点一下开关：全盘亮出所有「一眼可填」的答案（主动偷懒模式，默认关；键盘的「9 差 1」提示不受影响）"><span class="dot tipdot"></span>自明 <b id="stMust">0</b></span>
+              </div>
+              <div class="more-row more-btns">
+                <button class="mini" id="btnNote" aria-pressed="false" title="实体键盘：数字键=填确定数，小键盘 1-9=记候选笔记；打开后互换（快捷键 N 也能切换）。触屏设备不显示">笔记 关</button>
+                <button class="mini" id="btnFocus" aria-pressed="false">聚焦 关</button>
+                <button class="mini" id="btnCheck" aria-pressed="true" title="纠错开：填错当场标红并计数，已填对的格子会锁定防手滑（点一下关掉：不判对错、不标红、不锁格，像纸上做题）">纠错 开</button>
+                <button class="mini" id="btnSfx" aria-pressed="true" title="音效与震动：填对一声木鱼、填错一声闷响、通关三音上行；手机上填错会轻震一下">反馈 开</button>
+                <button class="mini" id="btnNew">换一题</button>
+                <button class="mini" id="btnDraftMini" title="草稿盘：把当前盘面另存一份，随便填随便改；退出后原盘面一格不动">开草稿</button>
+              </div>
+            </div>
+          </details>
+          <!-- 草稿常驻入口（2026-10-30）：⋯ 里那枚「开草稿」藏了两层，真机测试反馈「没找到」。
+               窄屏在状态行行尾直接摆一枚「草稿」胶囊（CSS 只在 ≤719px 显示，桌面上不出现），
+               进草稿后让位给上面的 stDraft 步数胶囊。 -->
+          <button class="st st-draft st-draft-open" id="btnDraftOpen" type="button"
+                  title="草稿推演：把当前盘面另存一份，随便填随便改；退出后原盘面一格不动">
+            <i class="df-ic" aria-hidden="true"></i>
+            <span class="df-t">草稿</span>
+          </button>
+        </span>
+      </div>
+      <div class="board" id="board"></div>
+      <button class="resume" id="resumeBtn" type="button" title="继续">续</button>
+      <div class="progress"><i id="bar"></i></div>
+      <span class="boardstamp" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stroke="#E8654F" stroke-width="2.6" stroke-dasharray="3 3.4"/><path d="M10 21 L24 13.5 L38 21 L24 28.5 Z" fill="#2B2B26"/><path d="M15.5 24.5 v6.5 c0 2.8 17 2.8 17 0 v-6.5" fill="none" stroke="#2B2B26" stroke-width="2.6"/><path d="M36.5 23 v8.5" stroke="#E8654F" stroke-width="2.2"/><circle cx="36.5" cy="34" r="2.4" fill="#E8654F"/></svg></span>
+
+      <!-- 下一步提示：棋盘上方的一过性浮层（不占版面高度，不自动消失，可手动收起） -->
+      <aside class="hintsheet" id="hintPanel" hidden>
+        <div class="hshd">
+          <span class="hsgrip" aria-hidden="true">⠿</span>
+          <h3>提示 <span class="tag" id="hintTag">待提示</span></h3>
+          <button class="btn sm" id="btnApply" hidden>应用</button>
+          <button class="btn sm" id="btnDraft" hidden title="把当前盘面另存一份草稿，自己动手把这条链走一遍（原盘面一格不动）">草稿推演</button>
+          <button class="btn sm hl-next" id="hintNext" hidden title="看懂了再点，翻开下一条讲解">下一步 ▸ 看懂了再点</button>
+          <button class="btn sm" id="hintClose">收起</button>
+        </div>
+        <div class="hsbody" id="hintBox"></div>
+      </aside>
+
+      <div class="pad" id="pad"></div>
+    </div>
+
+  </main>
+
+  <!-- ==================== 视图 · 拼图收集 ==================== -->
+  <section class="view pg" id="view-puzzle" hidden>
+    <div class="pghead">
+      <button class="back" id="pzBack">← 返回做题</button>
+      <h2><svg class="hic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 5.5 H9 Q8.5 3 11 3 Q13.5 3 13 5.5 H15.5 Q17 5.5 17 7 V9.5 Q19.5 9 19.5 11.5 Q19.5 14 17 13.5 V16 Q17 17.5 15.5 17.5 H7 Q5.5 17.5 5.5 16 V13.5 Q3 14 3 11.5 Q3 9 5.5 9.5 V7 Q5.5 5.5 6.5 5.5 Z"/></svg> 拼图收集 <span class="tag" id="pzCount">0 / 256</span></h2>
+    </div>
+    <div class="panel">
+      <div class="pz-progress">
+        <span>当前正在集：<b id="pzCurLevel">—</b></span>
+        <span id="pzCurTheme" class="pz-theme-tag"></span>
+      </div>
+      <div class="pz-stage-head">
+        <span class="pz-stage-title" id="pzStageTitle">—</span>
+        <span class="pz-stage-n" id="pzStageN">0 / 16</span>
+      </div>
+      <div class="pz-stage" id="pzStage"></div>
+      <div class="pzcap" id="pzCap"></div>
+    </div>
+    <div class="panel">
+      <h3>图鉴 <span class="tag">点击任意一幅查看</span></h3>
+      <div class="pz-index" id="pzIndex"></div>
+    </div>
+    <div class="panel">
+      <h3>怎么收集 <span class="tag">每通关一局 = 随机点亮当前一幅的一块</span></h3>
+      <div class="pztasks" id="pzTasks"></div>
+    </div>
+  </section>
+
+  <section class="view pg" id="view-skills" hidden>
+    <div class="pghead">
+      <button class="back" id="skBack">← 返回做题</button>
+      <h2>技巧图鉴 <span class="tag" id="skillTag">0 / 8</span></h2>
+    </div>
+    <div class="panel">
+      <div class="skills" id="skills"></div>
+    </div>
+    <div class="panel">
+      <h3>这个阶梯是怎么定出来的</h3>
+      <div class="empty">
+        难度不是靠「提示数多少」定的 —— 实测提示数与难度只有弱相关（皮尔逊 −0.393，解释力约 15%），
+        没法当指标用。<b>真正的指标是「解完这题最少要用到第几级技巧」</b>：<br><br>
+        每道题都用 L1 起逐级尝试，只用 L1 就能推完 → 定级 L1；必须动用到 L3 才能推完 → 定级 L3。
+        L1–L8 全上还解不完的，才会被判为超纲。实测在 300 道随机题上，这套阶梯的覆盖率是
+        <b>300 / 300 = 100%</b>。<br><br>
+        所以你在做题时看到的「本题 L3」，是一句可验证的承诺：<b>这题只需要 L3 及以下的技巧就能解完</b>，
+        不需要你去猜更高级的招。
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 视图 · 新手教程 ==================== -->
+  <section class="view pg" id="view-tutorial" hidden>
+    <div class="pghead">
+      <button class="back" id="tutBack">← 返回做题</button>
+      <h2>新手教程 <span class="tag" id="tutTag">L1–L8</span></h2>
+    </div>
+    <div class="panel">
+      <p class="pgnote" style="text-align:left">
+        每一招都配一个<b>真实的局面</b>：先把低一级的招数全部用光，剩下这一步<b>只能靠这一招</b>解开 ——
+        所以你看到的例子，就是这招真正该出场的时刻。点「换一个例子」可以换一道题。<br>
+        <b>零基础就从 L1 顺着往下看：</b>每一章开头都有一块「零基础先看」，用大白话把这一招的来龙去脉讲一遍，
+        看懂了再看下面的真实棋盘；嫌长可以点右上角「收起」。
+      </p>
+      <div class="tut-nav" id="tutNav"></div>
+      <div id="tutBody"><div class="empty">选一招开始看 ↓</div></div>
+    </div>
+  </section>
+
+  <!-- ==================== 视图 · 能力画像 ==================== -->
+  <section class="view pg" id="view-stats" hidden>
+    <div class="pghead">
+      <button class="back" id="stBack">← 返回做题</button>
+      <h2><svg class="hic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20 H20 M7.5 20 V13 M12 20 V7.5 M16.5 20 V11"/></svg> 能力画像</h2>
+    </div>
+    <div class="panel">
+      <div id="statsTop"></div>
+    </div>
+    <div class="panel">
+      <h3>分难度战绩 <span class="tag">通关数 / 题库总量 · 最快用时</span></h3>
+      <div id="statsTiers"></div>
+    </div>
+    <div class="panel">
+      <h3>技巧使用分布 <span class="tag">从 L1 到 L8，你用过的每一步推理</span></h3>
+      <div id="statsTech"></div>
+    </div>
+    <div class="panel">
+      <h3>每日挑战 <span class="tag">连续打卡反映的是习惯，不是天赋</span></h3>
+      <div id="statsDaily"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 视图 · 已做过的题 ==================== -->
+  <section class="view pg" id="view-records" hidden>
+    <div class="pghead">
+      <button class="back" id="recBack">← 返回做题</button>
+      <h2>我做过哪些题 <span class="tag" id="recCount">0</span></h2>
+    </div>
+    <div class="panel">
+      <div class="rec-filter" id="recFilter">
+        <button class="rf on" data-f="all">全部</button>
+        <button class="rf" data-f="progress">进行中</button>
+        <button class="rf" data-f="done">完成</button>
+        <button class="rf" data-f="abandon">放弃</button>
+      </div>
+      <div class="rec-list" id="recList"></div>
+      <div class="empty" id="recEmpty" hidden>还没有做过的题。开一局，系统就会自动把这一题记在这里。</div>
+    </div>
+  </section>
+
+  <!-- ==================== 视图 · 关于 & 玩法 ==================== -->
+  <section class="view pg" id="view-about" hidden>
+    <div class="pghead">
+      <button class="back" id="abBack">← 返回做题</button>
+      <h2>关于卷卷羊 · 数独学园</h2>
+    </div>
+
+    <div class="panel">
+      <div id="aboutBox"></div>
+    </div>
+
+    <div class="panel">
+      <h3>怎么玩</h3>
+      <div class="howto">
+        <p><b>键盘两行并存，不用切模式</b><br>
+        上行大字 = 填<b style="color:var(--player)">确定数</b>；下行小字 = 记<b style="color:var(--accent)">候选笔记</b>。
+        两行的大小、底色、边框都不同，想填哪种就点哪行。</p>
+
+        <p><b>三态清楚分开</b><br>
+        <b>深色粗体</b> = 题目给定（不可改，参与校验） ·
+        <b style="color:var(--player)">蜜桃粉</b> = 你自己填的（纠错开着时<b>填对就锁定</b>，改不了） ·
+        <b style="color:var(--note)">小灰字</b> = 笔记候选（纯推演，<b>不参与校验</b>，随你乱记也不会被判错）。</p>
+
+        <p><b>纠错开关（「⋯ 棋局设置 → 纠错」）</b><br>
+        <b>开</b>（默认）：填错当场标红并计数，已填对的格子随之<b>锁定</b>，防手滑点掉。<br>
+        <b>关</b>：不判对错、不标红、不计数、不锁格 —— 也就是纸上模式（Paper Mode）：
+        填对了也能改，填错了也没提示，同行同列同宫撞了数都不染红，全凭自己核对。</p>
+
+        <p><b>选中一个数字，全盘跟着亮</b><br>
+        点了某个数字（格子里的或键盘上的），同行 + 同列 + 同宫一起奶油底，
+        全盘同一个数字<b>染成深灰绿并描一圈细边</b>——扫「这个数字还能放哪 / 还差几个」一眼完成，
+        连笔记里的该候选也会高亮。记候选笔记<b>不算</b>：它是推演，不是场上出现的数字，不触发联动。</p>
+
+        <p><b>行 / 列 / 宫 9 差 1 时，键盘才亮缺的数</b><br>
+        只有当某一<b>横</b>、某一<b>竖</b>或某个<b>小九宫格</b>已经填了 8 个数、
+        而你选中的正是最后那个空格时，键盘才把缺的那个数字键
+        <b style="color:var(--green)">亮绿</b>、其余键淡出 —— 这时的答案不用想，纯搬运。<br>
+        除此之外（哪怕这一格靠排除只剩一个候选），键盘也不会替你数 —— 推理的过程留给你。</p>
+
+        <p>状态栏「自明 N」= 当前还有多少格「一眼可填」（只报数量、不报位置）。想直接看答案都在哪，
+        点它开启「全盘自明」，所有答案格一起亮幽灵数字 —— 那就是替你做题了，慎用。
+        想更专注可以开「聚焦」：其他格子全部变灰，专心想当前这一格。</p>
+
+        <p><b>数字填满 9 个就自动禁用</b><br>
+        某个数字在盘面出现满 9 次，键盘上下两行同时变灰、点了不可填，省得你反复试。</p>
+
+        <p><b>卡点本：把「看过一次」变成「真的会做」</b><br>
+        每次点「教我下一步」，都会自动存下<b>提示前的完整局面 + 你当时记的笔记 + 用到的那一招</b>。
+        之后可以重演推理链、做两问自测，还能<b>回到那个卡点自己重推一遍</b>。
+        自测全对才标「已掌握」—— 看过 ≠ 会做，答错就一直留在「待复习」。</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>我的卡点本 <span class="tag" id="cardTag">0 条</span></h3>
+      <div class="cardbrief" id="cardBrief"></div>
+      <button class="bigbtn soft" id="btnCards"><svg class="bic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 H16.5 Q18.5 4 18.5 6 V18 Q18.5 20 16.5 20 H7 Q5 20 5 18 V6 Q5 4 7 4 Z M8 4 V20 M11.5 8.5 H15 M11.5 12 H15 M11.5 15.5 H15"/></svg> 打开卡点本</button>
+    </div>
+
+    <div class="panel">
+      <h3>按键与操作</h3>
+      <div class="keys">
+        <span class="kbhint">
+          <code>1-9</code> 填确定数 · <code>小键盘 1-9</code> 记候选笔记 · <code>Shift+1-9</code> 临时记笔记 ·
+          <code>N</code> 笔记模式开关 · <code>0 / Backspace</code> 擦除 ·
+          <code>F</code> 聚焦 · <code>H</code> 提示 · <code>U</code> 撤销 · <code>方向键</code> 移动 ·
+          <code>Esc</code> 返回做题
+        </span>
+        <span class="touchhint">
+          点格子选中 → 点下方<b>上行大字</b>填确定数、<b>下行小字</b>记候选笔记。两行都在，不用切换模式。
+        </span>
+      </div>
+    </div>
+
+    <div class="pgnote">
+      卷卷羊 · 数独学园 v1.0 —— 「会教你的数独」：市面产品都在给答案，我们教推理。
+      WorkBuddy「1024 造物挑战」参赛作品。
+    </div>
+  </section>
+</div>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="dwhead">
+    <b><svg class="dic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 H16.5 Q18.5 4 18.5 6 V18 Q18.5 20 16.5 20 H7 Q5 20 5 18 V6 Q5 4 7 4 Z M8 4 V20 M11.5 8.5 H15 M11.5 12 H15 M11.5 15.5 H15"/></svg> 卡点本</b>
+    <span class="tag" id="dwTag">0 条</span>
+    <span class="sp"></span>
+    <button class="mini" id="dwExport">导出 JSON</button>
+    <button class="mini" id="dwClear">清空</button>
+    <button class="icon-btn" id="dwClose" title="关闭">✕</button>
+  </div>
+  <div class="dwbody" id="dwBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 每日挑战面板（2026-10-29）：顶栏小按钮点开的就是它。
+     今日题目 + 打卡图（近 6 周热力图）+ 连续/累计/最佳 + 开始挑战。 -->
+<div class="dailyov" id="dailyOv" hidden>
+  <div class="dv-box">
+    <div class="dv-hd">
+      <b><svg class="dv-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10 H20 M8.5 3.2 V7 M15.5 3.2 V7 M8.5 13.5 H10 M14 13.5 H15.5 M8.5 16.5 H10 M14 16.5 H15.5"/></svg> 每日挑战</b>
+      <span class="dv-date" id="dvDate">今天</span>
+      <span class="sp"></span>
+      <button class="icon-btn" id="dvClose" title="关闭">✕</button>
+    </div>
+    <div class="dv-body" id="dvBody"></div>
+  </div>
+</div>
+
+<!-- 账号中心（本地账号：注册/登录后进度按账号隔离） -->
+<div class="acctov" id="acctOv" hidden>
+  <div class="box">
+    <div class="em" id="acctEm"></div>
+    <h2 id="acctTitle">账号</h2>
+    <div id="acctBody"></div>
+    <button class="bigbtn soft" id="acctClose">关闭</button>
+  </div>
+</div>
+
+
+
+
+<!-- PUZZLE_DATA 已外链为 puzzles-data.js（异步加载，见文件末尾） -->
+
+
+<script src="./puzzles-data.js" async></script>
+
+<script src="./main.js"></script>
+</body>
+</html>
