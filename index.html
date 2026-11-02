@@ -90,12 +90,13 @@
       <a id="lnkAbout">玩法说明 →</a>
     </div>
 
-    <!-- J-B3 / K-1：桌面三栏左栏下部的空绿，用来放「卡点本摘要」——和「会教你的数独」定位最搭的那张卡。
-         常驻显示（空卡点也显示引导语），<1120px 由 CSS 的 display:none 彻底不占位。 -->
-    <div class="leftnote" id="leftNote">
-      <div class="ln-hd"><b>卡点本</b><span id="leftNoteTag">还没有</span></div>
-      <div class="ln-body" id="leftNoteBody"></div>
-      <button class="btn sm ln-btn" id="leftNoteBtn" type="button">打开卡点本</button>
+    <!-- J-B3 / K-1：桌面三栏左栏的「卡点本摘要」已由 v4 版式（2026-11-02）替换为三张数据卡：
+         每日挑战打卡图 / 拼图收集 / 最近技巧（#railCards，仅 ≥1120 由 CSS 显示）。
+         卡点本本体仍在 #drawer 抽屉与画像页，入口不变。 -->
+    <div class="railcards" id="railCards">
+      <div class="railcard" id="railDaily"></div>
+      <div class="railcard" id="railPz"></div>
+      <div class="railcard" id="railTech"></div>
     </div>
 
 

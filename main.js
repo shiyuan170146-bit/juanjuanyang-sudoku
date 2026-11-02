@@ -2570,6 +2570,7 @@ window.SUDOKU_BANK = {"seed":20261023,"tiers":[{"key":"easy","name":"入门","bl
 
       var n = count();
       $('pzCount').textContent = n + ' / ' + TOTAL_PIECES;
+      renderRail();                            /* v4：左栏拼图卡同步 */
       var cl = curLevel();
       if (n >= TOTAL_PIECES) {
         $('pzCurLevel').textContent = '全部集齐！';
@@ -2597,6 +2598,11 @@ window.SUDOKU_BANK = {"seed":20261023,"tiers":[{"key":"easy","name":"入门","bl
        拼图只能通过「通关一局解锁一块」真实获得。 */
 
     return { onSolved: onSolved, render: render, count: count, reload: reload,
+             rail: function () {                  /* v4：左栏拼图卡要的进度摘要 */
+               var lv = curLevel();
+               return { title: lv ? lv.title : '', got: lv ? (S0.got[lv.id] || []).length : 0,
+                        total: 16, gotAll: count(), totalAll: TOTAL_PIECES };
+             },
       get TOTAL() { return TOTAL_PIECES; }, lastGain: 0,
       onDataReady: function () { build(); render(); } };
   })();
@@ -2678,6 +2684,7 @@ window.SUDOKU_BANK = {"seed":20261023,"tiers":[{"key":"easy","name":"入门","bl
         : '每日挑战：今天是一道「' + mt.tier.name + '」题，点开看打卡图';
       var ov = $('dailyOv');
       if (ov && !ov.hidden) renderPanel();
+      renderRail();                              /* v4：左栏打卡卡同步 */
     }
     /* 打卡图：近 6 周（42 格）热力图。列 = 周日→周六，行 = 周。
        已打卡 = 暖黄实心 + 日号；过去漏打卡 = 虚线浅格；未来 = 极淡；今天多一圈墨环。 */
@@ -2960,6 +2967,55 @@ window.SUDOKU_BANK = {"seed":20261023,"tiers":[{"key":"easy","name":"入门","bl
   })();
 
   /* ============================================================
+     v4 桌面左栏三卡（2026-11-02）：每日挑战打卡 / 拼图收集 / 最近技巧
+     ------------------------------------------------------------
+     只在 ≥1120 的三栏版式里由 CSS 显示（.railcards），手机与中等屏
+     完全不渲染内容。数据全部读既有模块（DAILY / PZ / STATS），
+     不新增存储；各模块状态变化时自行调 renderRail() 刷新。
+     ============================================================ */
+  function renderRail() {
+    var rd = $('railDaily'), rp = $('railPz'), rt = $('railTech');
+    if (!rd && !rp && !rt) return;
+    if (rd) {
+      try {
+        var dst = DAILY.stat();
+        rd.innerHTML =
+          '<div class="rc-h"><b>每日挑战</b><span>' +
+            (dst.streak ? '连击 ' + dst.streak + ' 天' : '从今天开始') + '</span></div>' +
+          DAILY.heatHtml();
+      } catch (e) { rd.innerHTML = ''; }
+    }
+    if (rp) {
+      try {
+        var info = PZ.rail();
+        var cells = '', i;
+        for (i = 0; i < info.total; i++) cells += '<i class="rz-c' + (i < info.got ? ' on' : '') + '"></i>';
+        rp.innerHTML =
+          '<div class="rc-h"><b>拼图收集</b><span>' + info.gotAll + ' / ' + info.totalAll + '</span></div>' +
+          '<div class="rc-sub">' + info.title + ' · ' + info.got + '/' + info.total + ' 块</div>' +
+          '<div class="rz-grid">' + cells + '</div>';
+      } catch (e) { rp.innerHTML = ''; }
+    }
+    if (rt) {
+      try {
+        var stt = STATS.stat();
+        var rows = [], lv;
+        for (lv = 1; lv <= 8; lv++) {
+          var n = stt.tech[lv] || 0;
+          if (n > 0) rows.push({ lv: lv, n: n });
+        }
+        rows.sort(function (a, b) { return b.n - a.n; });
+        rt.innerHTML = '<div class="rc-h"><b>最近技巧</b><span>累计</span></div>' +
+          (rows.length
+            ? rows.slice(0, 3).map(function (r) {
+                return '<div class="rc-trow"><span>' + TECHS[r.lv - 1].name + '</span><b>×' + r.n + '</b></div>';
+              }).join('')
+            : '<div class="rc-empty">卡住点「提示」，用过的招会记在这里</div>');
+      } catch (e) { rt.innerHTML = ''; }
+    }
+  }
+
+  /* ============================================================
      战绩分享卡（Canvas 绘制，可直接保存 PNG）
      ------------------------------------------------------------
      通关结算里生成一张固定配色的卡片图：战绩 + 迷你终盘 + 产品信息。
@@ -3170,6 +3226,7 @@ window.SUDOKU_BANK = {"seed":20261023,"tiers":[{"key":"easy","name":"入门","bl
     S.hintCost += hintCost(act.level);
     S.used[act.level] = (S.used[act.level] || 0) + 1;
     unlockSkill(act.level);
+    renderRail();                            /* v4：左栏「最近技巧」同步 */
     S.sel = act.i;
     S.hintSeq = parseCells(act.reason || '');
     if (S.hintSeq.indexOf(act.i) < 0) S.hintSeq.push(act.i);
@@ -4530,7 +4587,7 @@ window.SUDOKU_BANK = {"seed":20261023,"tiers":[{"key":"easy","name":"入门","bl
     // 做题页锁滚动（页面不出滚动条）；二级页（技巧/关于/拼图）恢复正常滚动
     document.body.classList.toggle('lockplay', name === 'play');
     if (name !== 'play') hideHintSheet();   // 提示浮层只在做题页出现
-    if (name === 'play') onViewportChange();
+    if (name === 'play') { onViewportChange(); renderRail(); }   /* v4：左栏三卡随视图刷新 */
     // 顶栏导航按钮的选中态（卡点本是抽屉，不参与选中态）
     var map = { skills: 'navSkills', about: 'navAbout', puzzle: 'navPuzzle', stats: 'navStats', records: 'navRecords', tutorial: 'navTutorial' };
     for (var k in map) {

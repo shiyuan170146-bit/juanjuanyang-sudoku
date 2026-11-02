@@ -748,23 +748,23 @@ html.nohover .dbtn.done:hover{background:var(--amber);border-color:var(--amber)}
 .dailyov .dv-st b.ok{color:#2f7d32}            /* 已完成用稳重的绿，不刺眼 */
 .dailyov .dv-st span{font-size:var(--fs-12);color:var(--text3)}
 /* 打卡图（近 6 周热力图） */
-.dailyov .dh-h{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+.dailyov .dh-h,.railcard .dh-h{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
   font-size:var(--fs-14);font-weight:600;color:var(--text);margin-bottom:6px}
-.dailyov .dh-h > span{font-size:var(--fs-12);font-weight:400;color:var(--text3)}
-.dailyov .dh-leg{margin-left:auto;display:inline-flex;align-items:center;gap:9px;
+.dailyov .dh-h > span,.railcard .dh-h > span{font-size:var(--fs-12);font-weight:400;color:var(--text3)}
+.dailyov .dh-leg,.railcard .dh-leg{margin-left:auto;display:inline-flex;align-items:center;gap:9px;
   font-size:10px;font-weight:400;color:var(--text3)}
-.dailyov .dh-leg .dh-on,.dailyov .dh-leg .dh-off{display:inline-block;width:9px;height:9px;
+.dailyov .dh-leg .dh-on,.dailyov .dh-leg .dh-off,.railcard .dh-leg .dh-on,.railcard .dh-leg .dh-off{display:inline-block;width:9px;height:9px;
   border-radius:3px;vertical-align:middle;margin-right:3px}
-.dailyov .dh-leg .dh-on{background:var(--amber)}
-.dailyov .dh-leg .dh-off{background:var(--surface);border:1px dashed var(--line-strong)}
-.dailyov .dh-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:var(--s3)}
-.dailyov .dh-dow{font-size:10px;color:var(--text3);text-align:center;padding-bottom:2px}
-.dailyov .dh-c{aspect-ratio:1/1;display:grid;place-items:center;
+.dailyov .dh-leg .dh-on,.railcard .dh-leg .dh-on{background:var(--amber)}
+.dailyov .dh-leg .dh-off,.railcard .dh-leg .dh-off{background:var(--surface);border:1px dashed var(--line-strong)}
+.dailyov .dh-grid,.railcard .dh-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:var(--s3)}
+.dailyov .dh-dow,.railcard .dh-dow{font-size:10px;color:var(--text3);text-align:center;padding-bottom:2px}
+.dailyov .dh-c,.railcard .dh-c{aspect-ratio:1/1;display:grid;place-items:center;
   font-size:var(--fs-12);border-radius:6px;background:var(--surface);color:var(--text2)}
-.dailyov .dh-c.dh-on{background:var(--amber);color:#3a2e10;font-weight:700}
-.dailyov .dh-c.dh-off{background:transparent;color:var(--text3);border:1px dashed var(--line-strong)}
-.dailyov .dh-c.dh-fut{background:color-mix(in srgb,var(--text) 4%,transparent);color:transparent}
-.dailyov .dh-c.dh-today{box-shadow:0 0 0 2px var(--ink)}
+.dailyov .dh-c.dh-on,.railcard .dh-c.dh-on{background:var(--amber);color:#3a2e10;font-weight:700}
+.dailyov .dh-c.dh-off,.railcard .dh-c.dh-off{background:transparent;color:var(--text3);border:1px dashed var(--line-strong)}
+.dailyov .dh-c.dh-fut,.railcard .dh-c.dh-fut{background:color-mix(in srgb,var(--text) 4%,transparent);color:transparent}
+.dailyov .dh-c.dh-today,.railcard .dh-c.dh-today{box-shadow:0 0 0 2px var(--ink)}
 /* 连续 / 本月 / 累计 三项 */
 .dailyov .dv-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:var(--s3)}
 .dailyov .dv-num{display:flex;flex-direction:column;align-items:center;gap:2px;
@@ -776,14 +776,14 @@ html.nohover .dbtn.done:hover{background:var(--amber);border-color:var(--amber)}
 /* 手机窄屏：热力图格字更小，三项数字略收 */
 @media (max-width:560px){
   .dailyov .dv-body{padding:var(--s3)}
-  .dailyov .dh-c{font-size:10px}
+  .dailyov .dh-c,.railcard .dh-c{font-size:10px}
   .dailyov .dv-num b{font-size:var(--fs-18)}
 }
 /* 暗色：已完成绿与标签色提亮；漏打虚线框在深底上提一档对比 */
 [data-theme="dark"] .dailyov .dv-st b.ok{color:#7bd47f}
 [data-theme="dark"] .dailyov .dv-today .dv-tag{color:#1c1605}
-[data-theme="dark"] .dailyov .dh-c.dh-off{border-color:color-mix(in srgb,var(--text) 32%,transparent)}
-[data-theme="dark"] .dailyov .dh-leg .dh-off{background:transparent;border:1px dashed color-mix(in srgb,var(--text) 32%,transparent)}
+[data-theme="dark"] .dailyov .dh-c.dh-off,.railcard .dh-c.dh-off{border-color:color-mix(in srgb,var(--text) 32%,transparent)}
+[data-theme="dark"] .dailyov .dh-leg .dh-off,.railcard .dh-leg .dh-off{background:transparent;border:1px dashed color-mix(in srgb,var(--text) 32%,transparent)}
 
 .doneov{position:fixed;top:0;right:0;bottom:0;left:0;display:grid;place-items:center;z-index:80;
   background:var(--scrim);animation:fade .2s;padding:var(--s3)}
@@ -3011,45 +3011,48 @@ body.lockplay .wrap{
 .cn-k.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
 /* ============================================================
-   J-B3 · 桌面三栏左栏下部的「卡点本摘要」卡（占用原本空着的草地）
-   —— 只在 ≥1120px 出现；其余断点 hidden 不占位，布局零影响。
+   v4（2026-11-02）· 桌面三栏左栏三卡：每日挑战打卡 / 拼图收集 / 最近技巧
+   —— 只在 ≥1120px 出现；其余断点 display:none 不占位，手机零影响。
+   （原 J-B3「卡点本摘要」卡下线：卡点本本体仍在 #drawer 抽屉与画像页。）
+   数据由 renderRail()（index.bak.html）从 DAILY / PZ / STATS 读取。
    ============================================================ */
-.leftnote{display:none}
+.railcards{display:none}
 @media (min-width:1120px){
-  .leftnote{
-    display:block;margin-top:var(--s4);padding:11px 13px;
-    background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  #view-play > .sidecol{
+    display:flex;flex-direction:column;align-self:stretch;
   }
-  .leftnote[hidden]{display:none}
+  .railcards{
+    display:flex;flex-direction:column;gap:10px;
+    width:100%;max-width:300px;margin-top:var(--s4);
+    flex:1 1 auto;
+  }
+  .railcard{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    padding:10px 12px;
+  }
+  .railcard:last-child{margin-bottom:16px}
+  .rc-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+    font-size:var(--fs-12);color:var(--text3);margin-bottom:7px}
+  .rc-h b{color:var(--text);font-size:var(--fs-14);font-weight:600}
+  .rc-h span{color:var(--text3);font-size:11px;font-variant-numeric:tabular-nums}
+  .rc-sub{font-size:11.5px;color:var(--text3);margin:-3px 0 7px}
+  .rc-trow{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+    padding:4px 0;border-top:1px dashed var(--line);font-size:var(--fs-12);color:var(--text2)}
+  .rc-trow:first-of-type{border-top:0;padding-top:0}
+  .rc-trow b{color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+  .rc-empty{font-size:11.5px;color:var(--text3);line-height:1.6}
+  /* 拼图进度格：6 列小方块，已解锁 = 主色实心（grid-gap：Chrome 61 也认） */
+  .rz-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-gap:4px}
+  .rz-c{display:block;height:12px;border-radius:3px;border:1px dashed var(--line-strong);background:transparent}
+  .rz-c.on{border:1px solid var(--pri-line);background:var(--pri)}
+  /* 打卡热力图沿用 #dailyOv 的 .dh-* 既有样式，这里只对齐卡片内边距 */
+  .railcard .dh-h{margin-bottom:6px}
+  /* v4：左栏不再放「卡住了就点提示」说明条（手机与中等屏保留不动） */
+  #view-play > .sidecol > .tail{display:none}
 }
-.leftnote .ln-hd{
-  display:flex;align-items:baseline;justify-content:space-between;gap:8px;
-  font-size:var(--fs-12);color:var(--text3);margin-bottom:6px;
-}
-.leftnote .ln-hd b{color:var(--text);font-size:var(--fs-14);font-weight:600}
-.leftnote .ln-body{font-size:var(--fs-12);color:var(--text2);line-height:1.65}
-.leftnote .ln-body b{color:var(--text);font-weight:600}
-.leftnote .ln-btn{margin-top:9px;width:100%}
-/* 最近卡点两行：L 级 + 技巧名 + 日期，下一行一句话（做了什么） */
-.leftnote .ln-row{padding:6px 0;border-top:1px dashed var(--line)}
-.leftnote .ln-row:first-child{border-top:0;padding-top:0}
-.leftnote .ln-r1{display:flex;align-items:center;gap:6px;line-height:1.4}
-.leftnote .ln-r1 b{color:var(--text);font-weight:600;font-size:var(--fs-12);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.leftnote .ln-r1 i{margin-left:auto;font-style:normal;color:var(--text3);font-size:11px;
-  font-variant-numeric:tabular-nums;flex:0 0 auto}
-.leftnote .ln-r2{margin-top:2px;color:var(--text3);font-size:11.5px}
-.leftnote .ln-tip{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);
-  font-size:11.5px;color:var(--text3);line-height:1.6}
-/* K-1：左栏拉满棋盘行高，摘要卡贴到栏底 —— 上半段信息、下半段这张卡，
-   中间的留白变成「分组间距」而不是「没做完」。 */
-@media (min-width:1120px){
-  #view-play > .sidecol{align-self:stretch}
-  /* margin-bottom 16 负责把卡片抬进视口：做题页 .wrap 按 100dvh 取高、
-     而 body 上下各有 20px 内边距，所以 .wrap 底部天生越出视口 8~20px，
-     贴底的卡片下边缘会被裁掉。抬 16px 后卡底落在视口内 ≥8px。 */
-  #view-play > .sidecol > .leftnote{margin-top:auto;margin-bottom:16px}
-}
+/* legacy-c61：flex gap 兜底（同 .copyov 的写法惯例） */
+.legacy-c61 .railcards{gap:0}
+.legacy-c61 .railcards > * + *{margin-top:10px}
 
 /* ============================================================
    K-2 · 「剩余 N」与进度条的净空（放文件末尾保证优先级最高）
@@ -3311,6 +3314,47 @@ body.lockplay .wrap{
 .legacy-c61 #board.drafting .cell.dbad .order{color:rgb(124,121,113)}
 .legacy-c61[data-theme="dark"] #board.drafting .cell.dbad{background:rgb(89,98,88);outline-color:rgb(136,141,129)}
 .legacy-c61[data-theme="dark"] #board.drafting .cell.dbad .order{color:rgb(166,168,155)}
+
+/* ============================================================
+   v4（2026-11-02）· 900–1119 窄桌面：修「棋盘塌成 93px」死区
+   ------------------------------------------------------------
+   旧版这一档在矮窗时落到「矮窗补偿」的 --cell（100dvh-412px），
+   1064×505 这类窄矮窗口棋盘只剩 93px、键盘叠在棋盘下面。
+   这里把该档的 --cell 收成「高度预算 / 视口宽减去键盘栏」双约束，
+   得到棋盘贴左、键盘在右的紧凑双栏（版式与 720~899 同构）。
+   放文件末尾：必须赢过前面同特异性的 --cell 规则（2184/2403/2508）。
+   ============================================================ */
+@media (min-width:900px) and (max-width:1119px){
+  #view-play{--cell:min(500px, calc(100vh - 250px), calc(100vw - 620px));--cell:min(500px, calc(100dvh - 250px), calc(100vw - 620px))}
+}
+
+/* ===== v4 桌面布局修复：720~1119 的「棋盘左 + 键盘右」双栏 grid 被主题层
+   （约 1576 行 #view-play .boardwrap{display:flex}，同特异性、位置更靠后）整段压死，
+   键盘只能堆到棋盘下面。≥1120 有 2773 行的绝对定位右栏兜着，此区间没有 ——
+   在文件最末尾恢复 grid（后写胜出），并重排 status/progress/board/pad/bigbtn 五行。 ===== */
+@media (min-width:720px) and (max-width:1119px){
+  #view-play > .boardwrap{
+    display:grid;
+    grid-template-columns:auto minmax(224px,248px);
+    grid-template-rows:auto auto minmax(0,1fr) auto;
+    column-gap:var(--cg);row-gap:var(--s2);
+    flex:0 1 auto;min-height:0;width:auto;max-width:none;
+    align-self:center;justify-content:flex-start;
+  }
+  #view-play .boardwrap > .status{grid-column:1 / -1;grid-row:1;margin:0 auto var(--s2)}
+  #view-play .boardwrap > .progress{grid-column:1 / -1;grid-row:2;width:100%;margin:0}
+  #view-play .boardwrap > .board{grid-column:1;grid-row:3}
+  #view-play .boardwrap > .pad{grid-column:2;grid-row:3;width:100%;max-width:none;margin:0}
+  #view-play .boardwrap > .bigbtn{grid-column:2;grid-row:4;width:100%}
+  #view-play .boardwrap > .hintsheet{grid-column:1;grid-row:3;top:6px;left:0;right:auto;
+    transform:none;max-width:calc(var(--stage,520px) - 12px)}
+  #view-play .boardwrap > .boardstamp{top:calc(var(--cell) + 10px)}
+  /* 用户硬性要求：确定数与笔记候选必须同时在。2448 行「极矮窗藏笔记排」在 ≥1120
+     有 2808 行的恢复规则兜着，此区间没有 —— 这里同样恢复（本块在文件末尾，必胜出）。 */
+  #view-play .pad .row.nt,
+  #view-play .pad .rowlabel + .row.nt{display:grid}
+}
+
 
 
 
