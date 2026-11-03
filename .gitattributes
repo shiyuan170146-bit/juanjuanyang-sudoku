@@ -1,3 +1,11 @@
 * text=auto eol=lf
 *.jpg binary
 *.png binary
+
+# 语言统计修正
+# main.js 内含大段 HTML 字符串，被 GitHub linguist 误判为生成文件，强制计入
+# style.css 与 puzzles-data.js 是构建产物/题库数据，不计入语言占比
+*.js linguist-detectable=true
+main.js linguist-generated=false
+style.css linguist-detectable=false
+puzzles-data.js linguist-detectable=false
