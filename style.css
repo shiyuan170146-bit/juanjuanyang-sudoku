@@ -2485,10 +2485,12 @@ body.lockplay .top,
       让它 flex:1 吃满、再 space-between 把富余摊到三段间隙里：状态行→棋盘、棋盘→进度条、
       进度条→键盘，键盘于是贴住卡片底边。富余为负时（小屏/容器）space-between 退化成原样，
       不会把内容挤出去。 */
-/* 草稿胶囊：窄屏专供，桌面端不显示（桌面 ⋯ 本来就在行尾，够显眼）。
+/* 草稿胶囊：状态行行尾常驻「草稿」入口。
+   2026-11-02 用户反馈电脑端找不到草稿（⋯ 藏两层）——改为全端常驻，
+   不再限窄屏。进草稿后由 JS 置 hidden 让位给 stDraft 步数胶囊（.st[hidden] 兜底）。
    这条必须写在下面的 @media 之前 —— 同特异性，后写者胜。 */
 #view-play .boardwrap > .status .st-draft-open{
-  display:none;align-items:center;gap:5px;
+  display:inline-flex;align-items:center;gap:5px;
   height:22px;padding:0 9px;
   border:1.5px solid var(--draft);border-radius:999px;
   font-family:var(--font-ink);font-size:11px;line-height:1;
